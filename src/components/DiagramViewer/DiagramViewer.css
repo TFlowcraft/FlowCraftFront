@@ -1,0 +1,9 @@
+.bpmn-container {
+  width: calc(100% - 80px);
+  height: 60vh;
+  margin-left: 30px;
+  margin-right: 30px;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

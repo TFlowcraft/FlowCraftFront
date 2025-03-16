@@ -1,0 +1,44 @@
+.workflow-info {
+  padding: 15px;
+  margin-left: 20px;
+}
+
+.workflow-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.workflow-name {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.workflow-status {
+  padding: 5px 10px;
+  margin-left: 10px;
+  color: #488400;
+  background-color: #d5ffa2;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.workflow-details {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.workflow-id {
+  display: flex;
+  gap: 5px; /* Отступ между заголовком и значением */
+}
+
+.workflow-id-title {
+  font-weight: bold;
+}
+
+.workflow-id-desc {
+  color: #555;
+}
