@@ -31,7 +31,11 @@ const BpmnViewer = ({ diagram }) => {
     };
   }, [diagram]);
 
-  return <div ref={bpmnViewerRef} className="bpmn-container" />;
+  return (
+    <section>
+      <div ref={bpmnViewerRef} className="bpmn-container" />
+    </section>
+  );
 };
 
 export default BpmnViewer;

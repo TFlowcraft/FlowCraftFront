@@ -1,0 +1,60 @@
+.timelineContainer {
+  overflow-x: auto; /* Горизонтальный скролл */
+  position: relative;
+  background-color: #fff; /* Белый фон для контейнера */
+  border-radius: 8px;
+}
+
+/* Временная шкала */
+.timeScale {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3em;
+  border-bottom: 2px solid #1e1e1e;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  background-color: #1e1e1e;
+  padding: 0 1em;
+}
+
+.timeLabel {
+  font-size: 0.875em;
+  color: #fff;
+}
+
+/* Контейнер для процессов */
+.processesContainer {
+  position: relative;
+}
+
+/* Вертикальные полоски для секций времени */
+.timeSection {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.process {
+  position: relative;
+  height: 2.5em; /* Высота каждой строки процесса */
+}
+
+.processLine {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border-radius: 0.5em;
+  height: 1.5em; /* Высота цветной полоски */
+  display: flex;
+  align-items: center;
+  padding: 0 0.5em; /* Отступы для текста внутри линии */
+}
+
+.processLabel {
+  font-size: 0.875em;
+  white-space: nowrap;
+}

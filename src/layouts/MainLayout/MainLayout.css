@@ -1,14 +1,23 @@
 main {
-  background-color: #f5f5f5;
+  padding: 0 5%; /* Отступы по 5% слева и справа */
+  margin: 0 auto; /* Центрирование контента */
+  background-color: #f4f4f6;
 }
 
+/* Адаптивные отступы для маленьких экранов */
+@media (max-width: 768px) {
+  main {
+    padding: 0 10px; /* Фиксированные отступы на маленьких экранах */
+  }
+}
+
+section {
+  padding-top: 20px;
+}
+
+/* 
 .drop-area {
-  width: calc(
-    100% - 80px
-  ); /* Занимает всю ширину с отступами по 20px с каждой стороны */
-  height: 60vh; /* Высота 30% от высоты окна */
-  margin-left: 40px;
-  margin-right: 40px;
+  height: 60vh; 
   border-radius: 12px;
   background-color: white;
   display: flex;
@@ -35,4 +44,4 @@ main {
   color: #888;
   font-size: 16px;
   margin: 0;
-}
+} */

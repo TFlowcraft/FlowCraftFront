@@ -1,0 +1,43 @@
+.tabsContainer {
+}
+
+.tabsHeader {
+  display: flex;
+  justify-content: flex-start; /* Выравниваем кнопки по левому краю */
+  gap: 10px; /* Расстояние между кнопками */
+}
+
+.tabButton {
+  padding: 10px 20px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.tabButton:hover {
+  border-radius: 5px;
+  background-color: #8cff00;
+}
+
+.tabButton.active {
+  border-bottom: 3px solid #8cff00;
+}
+
+.tabsContent {
+  padding: 20px 0;
+}
+
+/* Адаптивные стили */
+@media (max-width: 768px) {
+  .tabsHeader {
+    flex-direction: column; /* Кнопки в столбик на мобильных устройствах */
+  }
+
+  .tabButton {
+    width: 100%; /* Кнопки занимают всю ширину */
+    text-align: left; /* Выравнивание текста по левому краю */
+  }
+}
