@@ -1,0 +1,64 @@
+.workflow-selector {
+    padding: 20px;
+    width: 100%;
+    min-height: 80vh; /* Задаем минимальную высоту контейнера */
+}
+
+.workflow-selector h2 {
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333;
+}
+
+.workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Всегда 2 колонки */
+    gap: 20px;
+    padding: 10px;
+}
+
+.workflow-card {
+    padding: 30px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    min-height: 50px; /* Минимальная высота вместо процентной */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.workflow-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.workflow-card h3 {
+    margin: 0;
+    font-size: 2rem;
+    color: var(--flowcraft-color-highlight, #865dff);
+}
+
+.workflow-card p {
+    font-size: 1.2rem;
+    color: var(--flowcraft-color-primary, #18171CFF);
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .workflow-grid {
+        grid-template-columns: 1fr; /* На мобильных - одна колонка */
+    }
+
+    .workflow-card {
+        height: 200px;
+        padding: 20px;
+    }
+
+    .workflow-card h3 {
+        font-size: 1.5rem;
+    }
+}

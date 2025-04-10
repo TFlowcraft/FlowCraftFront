@@ -1,21 +1,30 @@
 import React from "react";
-import "./WorkflowInfo.css";
+import styles from "./WorkflowInfo.module.css";
 
 export default function WorkflowInfo({ name, status, workflowId, runId }) {
+  const getStatusClassName = (status) => {
+    switch(status) {
+      case 'Completed':
+        return styles.workflowStatusCompleted;
+      case 'In work':
+        return styles.workflowStatusInWork;
+      default:
+        return styles.workflowStatus;
+    }
+  };
+
   return (
-    <section>
-      <div className="workflow-info">
-        <div className="workflow-header">
-          <div className="workflow-name">{name}</div>
-          <div className="workflow-status">{status}</div>
+      <section className={styles.workflowInfo}>
+        <div className={styles.workflowHeader}>
+          <div className={styles.workflowName}>{name}</div>
+          <div className={getStatusClassName(status)}>{status}</div>
         </div>
-        <div className="workflow-details">
-          <div className="workflow-id">
-            <span className="workflow-id-title">Workflow ID:</span>
-            <span className="workflow-id-desc">{workflowId}</span>
+        <div className={styles.workflowDetails}>
+          <div className={styles.workflowId}>
+            <span className={styles.workflowIdTitle}>Workflow ID:</span>
+            <span className={styles.workflowIdDesc}>{workflowId}</span>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
   );
 }

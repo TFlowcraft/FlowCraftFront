@@ -1,0 +1,62 @@
+.dialog {
+    border: none;
+    border-radius: 8px;
+    padding: 0;
+    width: 30%;
+
+    margin: 10rem auto;
+    z-index: 100;
+
+    animation: fadeOut 2s ease forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        transform: translateY(200px);
+    }
+    20% {
+        transform: translateY(0px);
+    }
+}
+
+.dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background-color: var(--flowcraft-color-highlight, #865DFF);
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 8px 8px 0 0;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--flowcraft-color-dark-background, #f4f4f6);
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+    padding: 0 8px;
+    line-height: 1;
+}
+
+.closeButton:hover {
+    color: #333;
+}
+
+.content {
+    background-color: var(--flowcraft-color-light-background, #f4f4f6);
+    padding: 20px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+

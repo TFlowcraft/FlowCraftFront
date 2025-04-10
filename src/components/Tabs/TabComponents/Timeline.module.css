@@ -1,3 +1,16 @@
+.processIdHeader {
+  color: var(--flowcraft-color-dark-background, #18171c);
+  padding: 0 10px 10px;
+  font-weight: bold;
+}
+
+.processIdHeaderData {
+  font-weight: normal;
+  color: #865DFFFF;
+  padding: 5px 0 5px;
+  border-radius: 5px;
+}
+
 .timelineContainer {
   overflow-x: auto; /* Горизонтальный скролл */
   position: relative;
@@ -48,7 +61,7 @@
   top: 50%;
   transform: translateY(-50%);
   border-radius: 0.5em;
-  height: 1.5em; /* Высота цветной полоски */
+  height: 2em; /* Высота цветной полоски */
   display: flex;
   align-items: center;
   padding: 0 0.5em; /* Отступы для текста внутри линии */
@@ -58,3 +71,4 @@
   font-size: 0.875em;
   white-space: nowrap;
 }
+

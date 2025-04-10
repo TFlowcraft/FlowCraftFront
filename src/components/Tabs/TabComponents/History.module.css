@@ -1,3 +1,16 @@
+.processIdHeader {
+  color: var(--flowcraft-color-dark-background, #18171c);
+  padding: 0 10px 10px;
+  font-weight: bold;
+}
+
+.processIdHeaderData {
+  font-weight: normal;
+  color: #865DFFFF;
+  padding: 5px 0 5px;
+  border-radius: 5px;
+}
+
 .table {
   display: flex;
   flex-direction: column;
@@ -31,14 +44,76 @@
 }
 
 /* Стили для каждого элемента в строке */
-.stateCell {
-  color: #1e1e1e;
-}
-
-.idCell {
-  color: 11ee1e;
+.stateCell span {
+  font-weight: normal;
+  padding: 4px 8px;
+  border-radius: 4px;
 }
 
 .startTimeCell .endTimeCell {
   color: #1e1e1e;
+}
+
+
+
+
+
+.historyContainer {
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.historyItem {
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.historyStatus {
+  margin-bottom: 4px;
+  font-weight: bold;
+}
+
+.historyStatus span {
+  margin-left: 0.5em;
+  font-weight: normal;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.historyTimestamp {
+  margin-bottom: 4px;
+  color: #666;
+}
+
+.historyTimestamp span {
+  color: #333;
+}
+
+.historyError {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #fff0f0;
+  border-radius: 4px;
+  font-family: monospace;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.historyError pre {
+  margin: 0;
+  font-size: 12px;
+}
+
+.loading {
+  padding: 10px;
+  text-align: center;
+  color: #666;
+}
+
+.tableRow:hover {
+  background-color: #f0f0f0;
 }

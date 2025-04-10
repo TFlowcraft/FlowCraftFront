@@ -1,7 +1,19 @@
 @import "./resources/fonts/fonts.css";
 
+:root {
+  --flowcraft-color-primary: #18171c;
+  --flowcraft-color-highlight: #865dff;
+  --flowcraft-color-light-background: #f4f4f6;
+  --flowcraft-color-dark-background: #18171c;
+}
+
 * {
   margin: 0;
   padding: 0;
   font-family: "Basis Grotesque Pro";
+}
+
+body, html {
+  height: 100%;
+  background-color: var(--flowcraft-color-light-background, #f4f4f6);
 }

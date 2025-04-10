@@ -1,75 +1,149 @@
 import React, { useState, useEffect } from "react";
-import styles from "./History.module.css"; // Импортируем стили из модуля
+import styles from "./History.module.css";
+import { dataStore } from "../../../resources/data/dataStore";
 
-const fetchHeader = () => {
-  return ["Status", "Task ID", "Start time", "End Time"];
+const getStatusStyles = (status) => {
+    switch(status) {
+        case 'COMPLETED':
+            return {
+                color: '#488400',
+                backgroundColor: '#d5ffa2'
+            };
+        case 'RUNNING':
+            return {
+                color: '#FFB600',
+                backgroundColor: '#FFE49F'
+            };
+        case 'PENDING':
+            return {
+                color: '#1D65FF',
+                backgroundColor: '#9FBDFF'
+            };
+        default:
+            return {};
+    }
 };
 
-// Функция, которая возвращает текущие данные
-const fetchData = () => {
-  return [
-    [
-      "In progress",
-      "fdghe_64hbf_8f9h8_nkjedfj",
-      "12:03:45 09-03-2025",
-      "12:03:45 09-03-2025",
-    ],
-    [
-      "End",
-      "fdghe_64hbf_8f9h8_nkjedfj",
-      "12:03:57 09-03-2025",
-      "12:03:45 09-03-2025",
-    ],
-    [
-      "Stop",
-      "fdghe_64hbf_8f9h8_nkjedfj",
-      "12:04:21 09-03-2025",
-      "12:03:45 09-03-2025",
-    ],
-  ];
+const TaskHistoryItem = ({ historyItem }) => {
+    return (
+        <>
+            <div className={styles.historyItem}>
+                <div className={styles.historyStatus}>
+                    Status:
+                    <span style={getStatusStyles(historyItem.taskStatus)}>
+                        {historyItem.taskStatus}
+                    </span>
+                </div>
+                <div className={styles.historyTimestamp}>
+                    Time: <span>{new Date(historyItem.timestamp * 1000).toLocaleString()}</span>
+                </div>
+                {historyItem.errorStacktrace && Object.keys(historyItem.errorStacktrace).length > 0 && (
+                    <div className={styles.historyError}>
+                        Error: <pre>{JSON.stringify(historyItem.errorStacktrace, null, 2)}</pre>
+                    </div>
+                )}
+            </div>
+        </>
+    );
 };
 
-const History = () => {
-  const [data, setData] = useState([]);
+const History = ({ selectedProcess }) => {
+    const [tasks, setTasks] = useState([]);
+    const [expandedTaskId, setExpandedTaskId] = useState(null);
+    const [taskHistory, setTaskHistory] = useState({});
+    const [loadingHistory, setLoadingHistory] = useState({});
 
-  // Загрузка данных при монтировании компонента
-  useEffect(() => {
-    const newData = fetchData(); // Получаем данные
-    setData(newData); // Обновляем состояние
-  }, []);
+    useEffect(() => {
+        if (!selectedProcess) return;
 
-  return (
-    <div className={styles.table}>
-      {/* Заголовки таблицы */}
-      <div className={styles.tableHeader}>
-        {fetchHeader().map((item, index) => (
-          <div key={index} className={styles.headerCell}>
-            {item}
-          </div>
-        ))}
-      </div>
+        const updateTasks = () => {
+            const instance = dataStore.getInstanceById(selectedProcess.id);
+            setTasks(instance?.tasks || []);
+        };
 
-      {/* Данные таблицы */}
-      <div className={styles.tableBody}>
-        {data.map((row, rowIndex) => (
-          <div key={rowIndex} className={styles.tableRow}>
-            <div className={`${styles.tableCell} ${styles.stateCell}`}>
-              {row[0]}
+        updateTasks();
+        const unsubscribe = dataStore.subscribe(updateTasks);
+
+        return () => unsubscribe();
+    }, [selectedProcess]);
+
+    const toggleTaskHistory = async (taskId) => {
+        if (expandedTaskId === taskId) {
+            setExpandedTaskId(null);
+            return;
+        }
+
+        setLoadingHistory(prev => ({ ...prev, [taskId]: true }));
+
+        try {
+            const history = await dataStore.getHistoryByTaskId(selectedProcess.id, taskId);
+            setTaskHistory(prev => ({ ...prev, [taskId]: history }));
+            setExpandedTaskId(taskId);
+        } catch (error) {
+            console.error("Error fetching task history:", error);
+        } finally {
+            setLoadingHistory(prev => ({ ...prev, [taskId]: false }));
+        }
+    };
+
+    return (
+        <>
+            <div className={styles.processIdHeader}>
+                Instance ID:
+                <div className={styles.processIdHeaderData}>{selectedProcess.id}</div>
             </div>
-            <div className={`${styles.tableCell} ${styles.idCell}`}>
-              {row[1]}
+            <div className={styles.table}>
+                <div className={styles.tableHeader}>
+                    {["Status", "Task ID", "Name", "Start time", "End Time"].map((item, index) => (
+                        <div key={index} className={styles.headerCell}>
+                            {item}
+                        </div>
+                    ))}
+                </div>
+                <div className={styles.tableBody}>
+                    {tasks.map((task) => (
+                        <React.Fragment key={task.id}>
+                            <div
+                                className={styles.tableRow}
+                                onClick={() => toggleTaskHistory(task.id)}
+                                style={{ cursor: "pointer" }}
+                            >
+                                <div className={`${styles.tableCell} ${styles.stateCell}`}>
+                                    <span style={getStatusStyles(task.status)}>
+                                        {task.status}
+                                    </span>
+                                </div>
+                                <div className={`${styles.tableCell} ${styles.idCell}`}>
+                                    {task.bpmnId}
+                                </div>
+                                <div className={`${styles.tableCell} ${styles.nameCell}`}>
+                                    {task.name}
+                                </div>
+                                <div className={`${styles.tableCell} ${styles.startTimeCell}`}>
+                                    {new Date(task.startTime).toLocaleString()}
+                                </div>
+                                <div className={`${styles.tableCell} ${styles.endTimeCell}`}>
+                                    {task.endTime ? new Date(task.endTime).toLocaleString() : "-"}
+                                </div>
+                            </div>
+
+                            {expandedTaskId === task.id && (
+                                <div className={styles.historyContainer}>
+                                    {loadingHistory[task.id] ? (
+                                        <div className={styles.loading}>Loading history...</div>
+                                    ) : (
+                                        taskHistory[task.id]?.map((historyItem, index) => (
+                                            <TaskHistoryItem key={index} historyItem={historyItem} />
+                                        ))
+                                    )}
+                                </div>
+                            )}
+                        </React.Fragment>
+                    ))}
+                </div>
             </div>
-            <div className={`${styles.tableCell} ${styles.startTimeCell}`}>
-              {row[2]}
-            </div>
-            <div className={`${styles.tableCell} ${styles.endTimeCell}`}>
-              {row[3]}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </>
+    );
 };
 
 export default History;

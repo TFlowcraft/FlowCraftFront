@@ -3,9 +3,17 @@
   border-radius: 12px;
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+  /* --token-simulation-green-base-44: #427900; */
+  --token-simulation-green-base-44: var(--flowcraft-color-primary);
 }
 
 .bpmn-container :focus {
   border-radius: 12px;
   outline: none;
+}
+
+.bjs-container.simulation .djs-container {
+  box-shadow: inset 0px 0px 0px 4px var(--token-simulation-green-base-44);
+  border-radius: 12px;
 }

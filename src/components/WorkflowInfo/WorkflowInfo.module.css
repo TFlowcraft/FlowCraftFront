@@ -1,0 +1,55 @@
+.workflowInfo {
+  /* Общие стили для контейнера */
+}
+
+.workflowHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.workflowName {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.workflowStatus {
+  padding: 5px 10px;
+  margin-left: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #585858;
+  background-color: #D0D0D0;
+}
+
+.workflowStatusCompleted {
+  composes: workflowStatus;
+  color: #488400;
+  background-color: #d5ffa2;
+}
+
+.workflowStatusInWork {
+  composes: workflowStatus;
+  color: #FFB600;
+  background-color: #FFE49F;
+}
+
+.workflowDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.workflowId {
+  display: flex;
+  gap: 5px;
+}
+
+.workflowIdTitle {
+  font-weight: bold;
+}
+
+.workflowIdDesc {
+  color: #555;
+}

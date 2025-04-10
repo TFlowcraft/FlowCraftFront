@@ -1,13 +1,35 @@
 main {
   padding: 0 5%; /* Отступы по 5% слева и справа */
   margin: 0 auto; /* Центрирование контента */
-  background-color: #f4f4f6;
+  background-color: var(--flowcraft-color-light-background, #f4f4f6);;
 }
 
-/* Адаптивные отступы для маленьких экранов */
+.workflow-header {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.back-button {
+  padding: 0 15px; /* Добавляем отступы для лучшего кликабельного пространства */
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+  font-size: 32px;
+  font-weight: bold;
+  color: var(--flowcraft-color-primary, #8cff00);
+  transition: transform 0.2s;
+}
+
+.back-button:hover {
+  transform: scale(1.2);
+}
+
+/* Адаптивность для маленьких экранов */
 @media (max-width: 768px) {
-  main {
-    padding: 0 10px; /* Фиксированные отступы на маленьких экранах */
+  .workflow-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
@@ -15,33 +37,25 @@ section {
   padding-top: 20px;
 }
 
-/* 
-.drop-area {
-  height: 60vh; 
-  border-radius: 12px;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 2px dashed #ccc;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+@keyframes main-layout-loading-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.drop-area.dragging {
-  background-color: #f0f0f0;
-  border-color: #888;
+.main-layout-loading {
+  position: fixed; /* Фиксированное позиционирование */
+  top: 50%; /* Позиционирование по вертикали */
+  left: 50%; /* Позиционирование по горизонтали */
+  transform: translate(-50%, -50%); /* Точное центрирование */
+  display: inline-block;
+  border: 10px solid var(--flowcraft-color-dark-background, #18171c);
+  border-left-color: var(--flowcraft-color-highlight, #8cff00);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: main-layout-loading-spin 1.2s linear infinite;
 }
-
-.plus-icon {
-  font-size: 48px;
-  color: #888;
-  margin-bottom: 10px;
-}
-
-.drop-area p {
-  color: #888;
-  font-size: 16px;
-  margin: 0;
-} */

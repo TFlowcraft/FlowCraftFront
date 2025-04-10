@@ -1,24 +1,32 @@
 import React, { useEffect, useRef } from "react";
-import BpmnNavigatedViewer from "bpmn-js/lib/NavigatedViewer";
-import TokenSimulationModule from "bpmn-js-token-simulation/lib/viewer";
+import BpmnNavigatedViewer from "bpmn-js/lib/NavigatedViewer"; // Используем NavigatedViewer
+import TokenSimulation from "bpmn-js-token-simulation/lib/viewer";
+import "bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css";
 import "./DiagramViewer.css";
 
-const BpmnViewer = ({ diagram }) => {
+const DiagramViewer = ({ diagram, intances }) => {
   const bpmnViewerRef = useRef(null);
+  const viewerInstance = useRef(null);
 
   useEffect(() => {
-    const bpmnViewer = new BpmnNavigatedViewer({
+    if (!diagram) return;
+
+    // Инициализация NavigatedViewer с поддержкой токен-симуляции
+    viewerInstance.current = new BpmnNavigatedViewer({
       container: bpmnViewerRef.current,
-      additionalModules: [TokenSimulationModule],
+      additionalModules: [TokenSimulation],
     });
 
     async function renderDiagram() {
       try {
-        await bpmnViewer.importXML(diagram);
-        // Масштабируем диаграмму по размеру контейнера
-        bpmnViewer.get("canvas").zoom("fit-viewport");
-        // Запускаем симуляцию
-        // bpmnViewer.get("canvas").start();
+        await viewerInstance.current.importXML(diagram);
+
+
+        // Масштабирование
+        const canvas = viewerInstance.current.get("canvas");
+        canvas.zoom("fit-viewport", "auto");
+
+
       } catch (err) {
         console.error("Ошибка при отображении диаграммы:", err);
       }
@@ -27,7 +35,16 @@ const BpmnViewer = ({ diagram }) => {
     renderDiagram();
 
     return () => {
-      bpmnViewer.destroy();
+      if (viewerInstance.current) {
+        const tokenSimulation = viewerInstance.current.get(
+          "tokenSimulation",
+          false
+        );
+        if (tokenSimulation && tokenSimulation.isActive()) {
+          tokenSimulation.stop();
+        }
+        viewerInstance.current.destroy();
+      }
     };
   }, [diagram]);
 
@@ -38,4 +55,4 @@ const BpmnViewer = ({ diagram }) => {
   );
 };
 
-export default BpmnViewer;
+export default DiagramViewer;

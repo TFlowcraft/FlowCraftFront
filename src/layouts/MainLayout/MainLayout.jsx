@@ -6,79 +6,175 @@ import Tabs from "../../components/Tabs/Tabs";
 import ProcessInstances from "../../components/Tabs/TabComponents/ProcessInstances";
 import History from "../../components/Tabs/TabComponents/History";
 import Timeline from "../../components/Tabs/TabComponents/Timeline";
+import ErrorHandler from "../../components/ErrorHandler/ErrorHandler";
+import WorkflowSelector from "../../components/WorkflowSelector/WorkflowSelector";
+import { dataStore } from "../../resources/data/dataStore";
+import ServerConnection from "../../components/ServerConnetion/ServerConnection";
 
 export default function MainLayout() {
-  const [diagram, setDiagram] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [selectedProcess, setSelectedProcess] = useState(null);
+    const [workflowsList, setWorkflowsList] = useState([]);
+    const [showWorkflowList, setShowWorkflowList] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
 
-  // Загружаем диаграмму при монтировании компонента
-  useEffect(() => {
-    // Загружаем содержимое файла из папки public
-    fetch("./diagram.bpmn")
-      .then((response) => response.text())
-      .then((data) => {
-        setDiagram(data); // Устанавливаем содержимое диаграммы
-      })
-      .catch((error) => {
-        console.error("Ошибка при загрузке диаграммы:", error);
-      });
-  }, []);
+    const handleConnectionSuccess = () => {
+        setIsConnected(true);
+        setShowWorkflowList(true);
+    };
 
-  const processes = [
-    {
-      label: "Process 1",
-      startTime: "14:30:00",
-      endTime: "15:45:00",
-    },
-    {
-      label: "Process 2",
-      startTime: "15:00:00",
-      endTime: "16:30:00",
-    },
-    {
-      label: "Process 3",
-      startTime: "16:00:00",
-      endTime: "17:15:00",
-    },
-    {
-      label: "Process 4",
-      startTime: "12:30:00",
-      endTime: "20:45:00",
-    },
-    {
-      label: "Process 5",
-      startTime: "15:00:00",
-      endTime: "16:30:00",
-    },
-    {
-      label: "Process 6",
-      startTime: "16:00:00",
-      endTime: "19:15:00",
-    },
-  ];
+    // Инициализация при монтировании
+    useEffect(() => {
+        const initialize = async () => {
+            try {
+                setLoading(true);
+                await dataStore.init();
 
-  return (
-    <main>
-      <WorkflowInfo
-        name={"ExampleWorkflow"}
-        status={"Running"}
-        workflowId={"sdgj4_jidjs_32h32_838nb"}
-        runId={"fdghe_64hbf_8f9h8_nkjsdfj"}
-      />
+                setWorkflowsList([...dataStore.workflows]);
+            } catch (err) {
+                console.error("Ошибка инициализации:", err);
+                setError({
+                    code: "CONNECTION_ERROR",
+                    message: "Ошибка загрузки данных",
+                    details: err.message,
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
 
-      {/* Отображаем диаграмму, если она загружена */}
-      {<BpmnViewer diagram={diagram} />}
+        initialize();
 
-      <Tabs>
-        <div label="Process Instances">
-          <ProcessInstances />
-        </div>
-        <div label="History">
-          <History />
-        </div>
-        <div label="Timeline">
-          <Timeline processes={processes} />
-        </div>
-      </Tabs>
-    </main>
-  );
+        // Подписка на изменения
+        const unsubscribe = dataStore.subscribe(() => {
+            setWorkflowsList([...dataStore.workflows]);
+        });
+
+        return () => {
+            dataStore.stopAutoUpdate();
+            unsubscribe();
+        };
+    }, []);
+
+    // Обработчик выбора workflow
+    const handleWorkflowSelect = async (workflow) => {
+        try {
+            setLoading(true);
+            await dataStore.loadWorkflow(workflow);
+            setShowWorkflowList(false);
+        } catch (err) {
+            setError({
+                code: "WORKFLOW_LOAD_ERROR",
+                message: "Ошибка загрузки workflow",
+                details: err.message,
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Обработчик возврата к списку
+    const handleBackToList = () => {
+        dataStore.currentWorkflow = null;
+        dataStore.stopAutoUpdate();
+        setSelectedProcess(null);
+        setShowWorkflowList(true);
+    };
+
+    // Обработчик ошибок
+    const handleErrorRetry = () => {
+        setError(null);
+        window.location.reload();
+    };
+
+    if (!isConnected) {
+        return <ServerConnection onConnectionSuccess={handleConnectionSuccess} />;
+    } else {
+
+    }
+
+    if (error) {
+        return (
+            <div className="main-layout">
+                <ErrorHandler
+                    errorCode={error.code}
+                    message={error.message}
+                    details={error.details}
+                    onRetry={handleErrorRetry}
+                />
+            </div>
+        );
+    }
+
+    if (loading) {
+        return <div className="main-layout-loading"></div>;
+    }
+
+    // Если нет выбранного workflow, показываем список
+    if (showWorkflowList || !dataStore.currentWorkflow) {
+        return (
+            <main className="main-layout">
+                <ServerConnection onConnectionSuccess={handleConnectionSuccess} />
+                <WorkflowSelector
+                    workflows={workflowsList}
+                    currentWorkflow={dataStore.currentWorkflow}
+                    onSelect={handleWorkflowSelect}
+                />
+            </main>
+        );
+    }
+
+    // Если workflow выбран, показываем его детали
+    return (
+        <main className="main-layout">
+            <div className="workflow-header">
+                <section>
+                    <button
+                        className="back-button"
+                        onClick={handleBackToList}
+                    >
+                        ←
+                    </button>
+                </section>
+                <WorkflowInfo
+                    name={dataStore.currentWorkflow.name}
+                    status={dataStore.currentWorkflow.getState()}
+                    workflowId={dataStore.currentWorkflow.id}
+                />
+
+            </div>
+
+            {dataStore.currentWorkflow.diagramXml && (
+                <BpmnViewer
+                    diagram={dataStore.currentWorkflow.diagramXml}
+                    instances={dataStore.currentWorkflow.instances || []}
+                />
+            )}
+
+            {dataStore.currentWorkflow.isInstancesNotNull() && (
+                <Tabs selectedProcess={selectedProcess}>
+                    <div label="Process Instances">
+                        <ProcessInstances
+                            instances={dataStore.currentWorkflow.instances || []}
+                            onSelectProcess={setSelectedProcess}
+                            selectedProcess={selectedProcess}
+                        />
+                    </div>
+                    <div label="History">
+                        <History
+                            selectedProcess={selectedProcess}
+                            instances={dataStore.currentWorkflow.instances || []}
+                        />
+                    </div>
+                    <div label="Timeline">
+                        <Timeline
+                            selectedProcess={selectedProcess}
+                            processes={dataStore.currentWorkflow.instances || []}
+                        />
+                    </div>
+                </Tabs>
+            )}
+        </main>
+    );
 }

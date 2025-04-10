@@ -1,5 +1,5 @@
 .header {
-  background-color: #18171c;
+  background-color: var(--flowcraft-color-primary);
   padding: 20px 20px;
   display: flex;
   justify-content: space-between;
@@ -20,7 +20,7 @@
 
 .header-link {
   font-family: "Basis Grotesque Pro";
-  color: white;
+  color: var(--flowcraft-color-light-background);
   text-decoration: none;
   font-size: 20px;
   position: relative;
@@ -35,7 +35,7 @@
   bottom: 0;
   width: 0;
   height: 2px;
-  background-color: #8cff00;
+  background-color: var(--flowcraft-color-highlight);
   transition: width 0.3s ease;
 }
 
@@ -44,13 +44,13 @@
 }
 
 .header-link:hover {
-  color: #8cff00;
+  color: var(--flowcraft-color-highlight);
   text-decoration: none;
 }
 
 .logo {
   font-family: "Basis Grotesque Pro";
-  color: white;
+  color: var(--flowcraft-color-light-background);
   text-decoration: none;
   font-size: 24px;
 }

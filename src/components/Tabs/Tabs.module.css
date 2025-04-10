@@ -10,6 +10,7 @@
 .tabButton {
   padding: 10px 20px;
   border: none;
+
   background-color: transparent;
   cursor: pointer;
   font-size: 16px;
@@ -19,11 +20,23 @@
 
 .tabButton:hover {
   border-radius: 5px;
-  background-color: #8cff00;
+  background-color: var(--flowcraft-color-highlight, #865DFFFF);
 }
 
 .tabButton.active {
-  border-bottom: 3px solid #8cff00;
+  border-bottom: 3px solid var(--flowcraft-color-highlight, #865DFFFF);
+}
+
+/* Добавляем стиль для disabled кнопок */
+.tabButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: #888; /* Серый текст */
+}
+
+/* Убираем hover-эффект для disabled кнопок */
+.tabButton.disabled:hover {
+  background-color: inherit;
 }
 
 .tabsContent {
