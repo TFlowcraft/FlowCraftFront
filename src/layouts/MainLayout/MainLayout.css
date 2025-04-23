@@ -1,6 +1,6 @@
 main {
-  padding: 0 5%; /* Отступы по 5% слева и справа */
-  margin: 0 auto; /* Центрирование контента */
+  padding: 0 5%;
+  margin: 0 auto;
   background-color: var(--flowcraft-color-light-background, #f4f4f6);;
 }
 
@@ -11,7 +11,7 @@ main {
 }
 
 .back-button {
-  padding: 0 15px; /* Добавляем отступы для лучшего кликабельного пространства */
+  padding: 0 15px;
   background-color: inherit;
   border: none;
   cursor: pointer;
@@ -25,7 +25,6 @@ main {
   transform: scale(1.2);
 }
 
-/* Адаптивность для маленьких экранов */
 @media (max-width: 768px) {
   .workflow-header {
     flex-direction: column;
@@ -47,10 +46,10 @@ section {
 }
 
 .main-layout-loading {
-  position: fixed; /* Фиксированное позиционирование */
-  top: 50%; /* Позиционирование по вертикали */
-  left: 50%; /* Позиционирование по горизонтали */
-  transform: translate(-50%, -50%); /* Точное центрирование */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: inline-block;
   border: 10px solid var(--flowcraft-color-dark-background, #18171c);
   border-left-color: var(--flowcraft-color-highlight, #8cff00);

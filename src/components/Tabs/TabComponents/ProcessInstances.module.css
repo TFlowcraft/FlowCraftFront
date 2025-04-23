@@ -32,10 +32,9 @@
 }
 
 .tableRow:last-child .tableCell {
-    border-bottom: none; /* Убираем границу у последней строки */
+    border-bottom: none;
 }
 
-/* Стили для каждого элемента в строке */
 .stateCell {
     color: #1e1e1e;
 }

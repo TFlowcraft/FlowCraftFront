@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./WorkflowInfo.module.css";
 
-export default function WorkflowInfo({ name, status, workflowId, runId }) {
+export default function WorkflowInfo({ name, status, workflowId }) {
   const getStatusClassName = (status) => {
     switch(status) {
       case 'Completed':

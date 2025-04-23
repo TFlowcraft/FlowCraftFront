@@ -1,4 +1,3 @@
-// store/DataStore.js
 import {
     checkProxyConnection,
     fetchProcessDiagram,
@@ -13,9 +12,9 @@ import {Task} from "../../models/Task.js";
 
 export class DataStore {
     constructor() {
-        this.workflows = []; // Все загруженные workflows
-        this.currentWorkflow = null; // Текущий выбранный workflow
-        this.updateInterval = null; // Ссылка на интервал обновления
+        this.workflows = [];
+        this.currentWorkflow = null;
+        this.updateInterval = null;
         this.subscribers = new Set();
     }
 
@@ -42,7 +41,7 @@ export class DataStore {
         await this.loadAllWorkflows();
     }
 
-    // Добавляем метод для загрузки всех workflow
+    // метод для загрузки всех workflow
     async loadAllWorkflows() {
         try {
             const workflowsData = await fetchWorkflow();
@@ -63,13 +62,10 @@ export class DataStore {
         this.stopAutoUpdate();
 
         try {
-            // 1. Получаем диаграмму процесса
             workflow.diagramXml = await fetchProcessDiagram(workflow.name);
 
-            // 2. Обновляем хранилище
             this.currentWorkflow = workflow;
 
-            // 4. Загружаем актуальные данные экземпляров
             await this.updateInstances(workflow.name);
         } catch (error) {
             console.error("Ошибка загрузки workflow:", error);
@@ -85,17 +81,14 @@ export class DataStore {
         if (!this.currentWorkflow) return;
 
         try {
-            // 1. Получаем экземпляры процесса
             const instancesData = await fetchProcessInstances(processName);
 
-            // 2. Обновляем данные для каждого экземпляра
             await Promise.all(
                 instancesData.map(async (instanceData) => {
                     let instance = this.currentWorkflow.instances.find(
                         (inst) => inst.id === instanceData.id
                     );
 
-                    // Создаем новый экземпляр если не найден
                     if (!instance) {
                         instance = new Instance(
                             instanceData.id,
@@ -105,13 +98,11 @@ export class DataStore {
                         );
                         this.currentWorkflow.addInstance(instance);
                     } else {
-                        // Обновляем существующий экземпляр
                         instance.startTime = instance._parseUnixTimeWithNanos(instanceData.startedAt);
                         instance.endTime = isNaN(instanceData.completedAt) ? null : instance._parseUnixTimeWithNanos(instanceData.completedAt);
                         instance.businessData = instanceData.businessData || {};
                     }
 
-                    // 3. Обновляем задачи для экземпляра
                     await this.updateTasksForInstance(processName, instance.id);
 
                     this.notifySubscribers(); // Уведомляем подписчиков
@@ -123,7 +114,6 @@ export class DataStore {
                 (inst) => instancesData.some((data) => data.id === inst.id)
             );
 
-            this.lastUpdate = new Date();
             return true;
         } catch (error) {
             console.error("Ошибка обновления экземпляров:", error);
@@ -139,10 +129,8 @@ export class DataStore {
         if (!instance) return;
 
         try {
-            // Получаем актуальные задачи
             const activeTasks = await fetchTasks(processName, instanceId);
 
-            // Обновляем задачи в экземпляре
             instance.tasks = activeTasks
                 .map((taskData) => {
                     return new Task(
@@ -185,12 +173,6 @@ export class DataStore {
     getInstanceById(id) {
         if (!this.currentWorkflow) return null;
         return this.currentWorkflow.instances.find((inst) => inst.id === id);
-    }
-
-    // Метод для получения только активных задач экземпляра
-    getTasksForInstance(instanceId) {
-        const instance = this.getInstanceById(instanceId);
-        return instance?.tasks || [];
     }
 
     getHistoryByTaskId(instanceId, taskId) {

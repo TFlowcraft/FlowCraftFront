@@ -3,7 +3,7 @@ export class Workflow {
     this.name = name;
     this.id = id;
     this.xml = xml;
-    this.instances = []; // Список экземпляров этого workflow
+    this.instances = [];
   }
 
   addInstance(instance) {
@@ -16,12 +16,11 @@ export class Workflow {
 
   getState() {
     if (this.instances.length === 0) {
-      return "No instances"; // Если нет экземпляров
+      return "No instances";
     }
 
     // Проверяем, все ли экземпляры завершены
     const allCompleted = this.instances.every(instance => {
-      // Предполагаем, что у Instance есть свойство endTime или completedAt
       return instance.endTime !== null || instance.completedAt !== undefined;
     });
 

@@ -46,7 +46,6 @@ export default function MainLayout() {
 
         initialize();
 
-        // Подписка на изменения
         const unsubscribe = dataStore.subscribe(() => {
             setWorkflowsList([...dataStore.workflows]);
         });
@@ -57,7 +56,6 @@ export default function MainLayout() {
         };
     }, []);
 
-    // Обработчик выбора workflow
     const handleWorkflowSelect = async (workflow) => {
         try {
             setLoading(true);
@@ -74,7 +72,6 @@ export default function MainLayout() {
         }
     };
 
-    // Обработчик возврата к списку
     const handleBackToList = () => {
         dataStore.currentWorkflow = null;
         dataStore.stopAutoUpdate();
@@ -82,7 +79,6 @@ export default function MainLayout() {
         setShowWorkflowList(true);
     };
 
-    // Обработчик ошибок
     const handleErrorRetry = () => {
         setError(null);
         window.location.reload();

@@ -4,7 +4,6 @@ import styles from "./Tabs.module.css";
 export default function Tabs({ children, selectedProcess }) {
   const [activeTab, setActiveTab] = useState("Process Instances");
 
-  // Все вкладки теперь всегда видны, но могут быть disabled
   const tabs = children.map((child) => ({
     label: child.props.label,
     disabled: child.props.label !== "Process Instances" && !selectedProcess,

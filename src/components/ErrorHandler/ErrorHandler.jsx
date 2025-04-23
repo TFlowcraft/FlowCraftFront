@@ -1,6 +1,5 @@
-// components/ErrorHandler/ErrorHandler.jsx
 import React from "react";
-import styles from "./ErrorHandler.module.css"; // Импорт стилей как модуля
+import styles from "./ErrorHandler.module.css";
 
 const ErrorHandler = ({ errorCode, message, details, onRetry }) => {
   const getErrorTitle = (code) => {

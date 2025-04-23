@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
-import BpmnNavigatedViewer from "bpmn-js/lib/NavigatedViewer"; // Используем NavigatedViewer
+import BpmnNavigatedViewer from "bpmn-js/lib/NavigatedViewer";
 import TokenSimulation from "bpmn-js-token-simulation/lib/viewer";
 import "bpmn-js-token-simulation/assets/css/bpmn-js-token-simulation.css";
 import "./DiagramViewer.css";
 
-const DiagramViewer = ({ diagram, intances }) => {
+const DiagramViewer = ({ diagram }) => {
   const bpmnViewerRef = useRef(null);
   const viewerInstance = useRef(null);
 

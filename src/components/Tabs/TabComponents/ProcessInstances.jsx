@@ -25,7 +25,7 @@ const ProcessInstances = ({onSelectProcess, selectedProcess}) => {
     };
 
     const handleBusinessDataClick = (e, instance) => {
-        e.stopPropagation(); // Предотвращаем всплытие события
+        e.stopPropagation();
         setCurrentInstance(instance);
         setModalOpen(true);
     };

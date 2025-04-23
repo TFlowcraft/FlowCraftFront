@@ -4,7 +4,7 @@ export class Instance {
         this.startTime = this._parseUnixTimeWithNanos(startTime);
         this.endTime = isNaN(endTime) ? null : this._parseUnixTimeWithNanos(endTime);
         this.businessData = businessData;
-        this.tasks = []; // Список задач этого экземпляра
+        this.tasks = [];
     }
 
     get status() {

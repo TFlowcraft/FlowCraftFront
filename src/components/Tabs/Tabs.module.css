@@ -3,8 +3,8 @@
 
 .tabsHeader {
   display: flex;
-  justify-content: flex-start; /* Выравниваем кнопки по левому краю */
-  gap: 10px; /* Расстояние между кнопками */
+  justify-content: flex-start;
+  gap: 10px;
 }
 
 .tabButton {
@@ -27,14 +27,12 @@
   border-bottom: 3px solid var(--flowcraft-color-highlight, #865DFFFF);
 }
 
-/* Добавляем стиль для disabled кнопок */
 .tabButton.disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  color: #888; /* Серый текст */
+  color: #888;
 }
 
-/* Убираем hover-эффект для disabled кнопок */
 .tabButton.disabled:hover {
   background-color: inherit;
 }
@@ -43,14 +41,13 @@
   padding: 20px 0;
 }
 
-/* Адаптивные стили */
 @media (max-width: 768px) {
   .tabsHeader {
-    flex-direction: column; /* Кнопки в столбик на мобильных устройствах */
+    flex-direction: column;
   }
 
   .tabButton {
-    width: 100%; /* Кнопки занимают всю ширину */
-    text-align: left; /* Выравнивание текста по левому краю */
+    width: 100%;
+    text-align: left;
   }
 }
